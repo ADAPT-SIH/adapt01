@@ -1,26 +1,27 @@
 import streamlit as st
 import pandas as pd
+
+# ---------------------------
+# Dynamic Chart of Results
+# ---------------------------
 import altair as alt
 
-st.title("Dynamic Chart")
-
-# 👇 User inputs
-num_points = st.slider("Number of points", 5, 50, 10)
-multiplier = st.slider("Y value multiplier", 1, 10, 2)
-
-# 👇 Data changes dynamically with sliders
-df = pd.DataFrame({
-    "x": list(range(1, num_points + 1)),
-    "y": [i * multiplier for i in range(1, num_points + 1)]
+chart_df = pd.DataFrame({
+    "Stage": ["Production (kg CO₂e/t)", "Transport (kg CO₂e/t)", "Total (kg CO₂e/t)"],
+    "Value": [kgco2_per_kg * 1000, transport_kgco2_per_ton, total_co2_per_tonne]
 })
 
-# 👇 Altair chart built on updated data
-chart = alt.Chart(df).mark_line(point=True).encode(
-    x="x",
-    y="y"
+st.subheader("Visual Representation")
+chart = alt.Chart(chart_df).mark_bar(color="#1f77b4").encode(
+    x=alt.X("Stage", sort=None),
+    y="Value"
+).properties(
+    width=600,
+    height=400
 )
 
 st.altair_chart(chart, use_container_width=True)
+
 
 
 st.set_page_config(page_title="SustainaMine - LCA for Metals", layout="wide")
