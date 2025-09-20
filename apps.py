@@ -4,14 +4,14 @@ import altair as alt
 
 chart_df = pd.DataFrame({
     "Stage": ["Production (kg CO₂e/t)", "Transport (kg CO₂e/t)", "Total (kg CO₂e/t)"],
-    "Value": [float(kgco2_per_kg) * 1000.0, float(transport_kgco2_per_ton), float(total_co2_per_tonne)]
+    "Value": [kgco2_per_kg * 1000, transport_kgco2_per_ton, total_co2_per_tonne]
 })
 
-st.subheader("Visual Representation")
-# Streamlit's built-in bar chart — no external lib required
-st.bar_chart(chart_df.set_index("Stage"))
-
-
+chart = alt.Chart(chart_df).mark_bar().encode(
+    x=alt.X("Stage", sort=None),
+    y="Value"
+)
+st.altair_chart(chart, use_container_width=True)
 
 st.set_page_config(page_title="SustainaMine - LCA for Metals", layout="wide")
 
