@@ -1,26 +1,15 @@
 import streamlit as st
 import pandas as pd
-
-# ---------------------------
-# Dynamic Chart of Results
-# ---------------------------
 import altair as alt
 
 chart_df = pd.DataFrame({
     "Stage": ["Production (kg CO₂e/t)", "Transport (kg CO₂e/t)", "Total (kg CO₂e/t)"],
-    "Value": [kgco2_per_kg * 1000, transport_kgco2_per_ton, total_co2_per_tonne]
+    "Value": [float(kgco2_per_kg) * 1000.0, float(transport_kgco2_per_ton), float(total_co2_per_tonne)]
 })
 
 st.subheader("Visual Representation")
-chart = alt.Chart(chart_df).mark_bar(color="#1f77b4").encode(
-    x=alt.X("Stage", sort=None),
-    y="Value"
-).properties(
-    width=600,
-    height=400
-)
-
-st.altair_chart(chart, use_container_width=True)
+# Streamlit's built-in bar chart — no external lib required
+st.bar_chart(chart_df.set_index("Stage"))
 
 
 
